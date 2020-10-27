@@ -13,5 +13,6 @@ bool processCommandLine(
   bool& versionRequested,
   std::string& inputFile,
   std::string& outputFile,
-  size_t& key);
+  size_t& key,
+  bool& encrypt);
 #endif // MPAGSCIPHER_PROCESSCOMMANDLINE_HPP

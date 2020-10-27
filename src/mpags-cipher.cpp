@@ -24,10 +24,11 @@ int main(int argc, char* argv[])
   bool versionRequested {false};
   std::string inputFile {""};
   std::string outputFile {""};
-  size_t key {};
+  size_t key {0};
+  bool encrypt {true};
 
   // Process the command line arguments
-  processCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile, key);
+  processCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile, key, encrypt);
 
   // Handle help, if requested
   if (helpRequested) {
@@ -42,7 +43,9 @@ int main(int argc, char* argv[])
       << "                   Stdin will be used if not supplied\n\n"
       << "  -o FILE          Write processed text to FILE\n"
       << "                   Stdout will be used if not supplied\n\n"
-      << "  -k INT           Use INT key value for caeser cipher\n\n";
+      << "  -k INT           Use INT value as key for caeser cipher, default = 0\n\n"
+      << "  --encrypt        Encrypt input using caeser cipher, enabled by default\n\n"
+      << "  --decrypt        Decrypt input using caeser cipher\n\n";
     // Help requires no further action, so return from main
     // with 0 used to indicate success
     return 0;
@@ -69,7 +72,7 @@ int main(int argc, char* argv[])
 
     if (okay_to_read){
       while(in_file >> inputChar){
-        inputText += runCaeserCipher(transformChar(inputChar), key, true);
+        inputText += runCaeserCipher(transformChar(inputChar), key, encrypt);
       }
     }
     else {
@@ -85,10 +88,9 @@ int main(int argc, char* argv[])
     std::cout << "[warning] no input file given, using cin. Press CTRL-D to run after entering input.\n" << std::endl;
     while(std::cin >> inputChar)
     { 
-      inputText += runCaeserCipher(transformChar(inputChar), key, true);
+      inputText += runCaeserCipher(transformChar(inputChar), key, encrypt);
     }
   }
-
 
 
   // Output the transliterated text

@@ -7,7 +7,8 @@ bool processCommandLine(
   bool& versionRequested,
   std::string& inputFile,
   std::string& outputFile,
-  size_t& key) 
+  size_t& key,
+  bool& encrypt) 
 {
   // Add a typedef that assigns another name for the given type for clarity
   typedef std::vector<std::string>::size_type size_type;
@@ -53,12 +54,23 @@ bool processCommandLine(
     }
     else if (cmdLineArgs[i] == "-k") {
       // Handle key option
+      if (i == nCmdLineArgs - 1) {
+        // No key after -k, give error
+        std::cout << "[error] -k requires a key argument" << std::endl;
+        return 1;
+      }
+      else {
+        // Key provided, advance
         key = std::stol(cmdLineArgs[i+1]);
         ++i;
+      }
     }
-    //
-    // add encrypt handling 
-    //
+    else if (cmdLineArgs[i] == "--encrypt"){
+      encrypt = true;
+    }
+    else if (cmdLineArgs[i] == "--decrypt"){
+      encrypt = false;
+    }
     else {
       // Have an unknown flag to output error message and return non-zero
       // exit status to indicate failure
