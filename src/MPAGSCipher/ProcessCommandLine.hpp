@@ -12,5 +12,6 @@ bool processCommandLine(
   bool& helpRequested,
   bool& versionRequested,
   std::string& inputFile,
-  std::string& outputFile );
+  std::string& outputFile,
+  size_t& key);
 #endif // MPAGSCIPHER_PROCESSCOMMANDLINE_HPP

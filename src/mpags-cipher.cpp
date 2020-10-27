@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 // For std::isalpha and std::isupper
 #include <cctype>
@@ -10,6 +11,7 @@
 // Our project headers
 #include "TransformChar.hpp"
 #include "ProcessCommandLine.hpp"
+#include "RunCaeserCipher.hpp"
 
 // Main function of the mpags-cipher program
 int main(int argc, char* argv[])
@@ -22,9 +24,10 @@ int main(int argc, char* argv[])
   bool versionRequested {false};
   std::string inputFile {""};
   std::string outputFile {""};
+  size_t key {};
 
   // Process the command line arguments
-  processCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile);
+  processCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile, key);
 
   // Handle help, if requested
   if (helpRequested) {
@@ -38,7 +41,8 @@ int main(int argc, char* argv[])
       << "  -i FILE          Read text to be processed from FILE\n"
       << "                   Stdin will be used if not supplied\n\n"
       << "  -o FILE          Write processed text to FILE\n"
-      << "                   Stdout will be used if not supplied\n\n";
+      << "                   Stdout will be used if not supplied\n\n"
+      << "  -k INT           Use INT key value for caeser cipher\n\n";
     // Help requires no further action, so return from main
     // with 0 used to indicate success
     return 0;
@@ -65,7 +69,7 @@ int main(int argc, char* argv[])
 
     if (okay_to_read){
       while(in_file >> inputChar){
-        inputText += transformChar(inputChar);
+        inputText += runCaeserCipher(transformChar(inputChar), key, true);
       }
     }
     else {
@@ -81,7 +85,7 @@ int main(int argc, char* argv[])
     std::cout << "[warning] no input file given, using cin. Press CTRL-D to run after entering input.\n" << std::endl;
     while(std::cin >> inputChar)
     { 
-      inputText += transformChar( inputChar );
+      inputText += runCaeserCipher(transformChar(inputChar), key, true);
     }
   }
 
